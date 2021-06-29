@@ -47,6 +47,7 @@
 -   Add retries to PKB.
 -   Added GCE networking MTU support with --mtu.
 -   Add pd extreme support to PKB.
+-   Add cURL benchmark for object storage.
 
 ### Enhancements:
 
