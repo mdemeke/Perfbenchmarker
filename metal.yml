@@ -1,0 +1,14 @@
+static_vms:  # Any key is accepted here.
+  - &vm1
+    user_name: root
+    ssh_private_key: /Users/mdemeke/.ssh/id_rsa
+    ip_address: 147.75.35.177
+    internal_ip: 10.32.85.133
+    disk_specs:
+      - device_path: /dev/sda
+
+fio:
+  vm_groups:
+    default:
+      static_vms:
+        - *vm1

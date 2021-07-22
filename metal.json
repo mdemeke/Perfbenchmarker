@@ -1,0 +1,17 @@
+[
+    { 
+    "ip_address" : "139.178.85.27" ,
+    "user_name" : "root",
+    "keyfile_path" : "/Users/mdemeke/.ssh/id_rsa",
+    "internal_ip" : "10.70.36.9" 
+    }
+    ,
+    { 
+    "ip_address" : "145.40.102.217" ,
+    "user_name" : "root",
+    "keyfile_path" : "/Users/mdemeke/.ssh/id_rsa",
+    "internal_ip" : "10.70.36.5"
+
+    }
+    
+   ]
