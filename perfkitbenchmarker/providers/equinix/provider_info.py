@@ -25,3 +25,4 @@ class EquinixProviderInfo(provider_info.BaseProviderInfo):
 
  
   CLOUD = providers.EQUINIX
+

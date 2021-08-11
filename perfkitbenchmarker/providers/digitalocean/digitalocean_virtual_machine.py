@@ -80,8 +80,7 @@ class DigitalOceanVirtualMachine(virtual_machine.BaseVirtualMachine):
          '--image', self.image,
          '--user-data', CLOUD_CONFIG_TEMPLATE.format(
              self.user_name, public_key),
-         '--enable-private-networking',
-         '--wait'])
+])
     if retcode:
       raise errors.Resource.RetryableCreationError('Creation failed: %s' %
                                                    (response,))

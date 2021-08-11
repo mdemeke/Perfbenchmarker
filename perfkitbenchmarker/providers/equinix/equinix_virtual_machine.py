@@ -22,6 +22,7 @@ from perfkitbenchmarker import vm_util
 from perfkitbenchmarker.providers.digitalocean import digitalocean_disk
 from perfkitbenchmarker.providers.equinix import util
 from six.moves import range
+from perfkitbenchmarker import linux_virtual_machine as linux_vm
 
 # DigitalOcean sets up the root account with a temporary
 # password that's set as expired, requiring it to be changed
@@ -54,6 +55,7 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
   CLOUD = providers.EQUINIX
   # Subclasses should override the default image.
   DEFAULT_IMAGE = None
+  
 
   def __init__(self, vm_spec):
     """Initialize a BareMetal virtual machine.
@@ -62,10 +64,11 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
       vm_spec: virtual_machine.BaseVirtualMachineSpec object of the vm.
     """
     super(MetalVirtualMachine, self).__init__(vm_spec)
-    self.project_id = None
+    self.device_id = None
     self.max_local_disks = 1
     self.local_disk_counter = 0
     self.image = self.image or self.DEFAULT_IMAGE
+    
 
   def _Create(self):
     """Create a BareMetal instance ."""
@@ -74,38 +77,39 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
 
     response, retcode = util.MetalAndParse(
         ['device', 'create', 
-         self.name, 
-         '--hostname',
+         '--hostname', self.name,
          '--metro', self.zone, #metro
          '--plan', self.machine_type, #plan
          '--operating-system', self.image, #OS
-         '--user-data', CLOUD_CONFIG_TEMPLATE.format(
+         '--userdata', CLOUD_CONFIG_TEMPLATE.format(
              self.user_name, public_key)
          ])
     if retcode:
       raise errors.Resource.RetryableCreationError('Creation failed: %s' %
                                                    (response,))
-    self.project_id = response[0]['id']
+    self.device_id = response['id']
 
   @vm_util.Retry()
   def _PostCreate(self):
     """Get the instance's data."""
     response, retcode = util.MetalAndParse(
-        ['metal', 'device', 'get', self.project_id])
-    for interface in response[0]['networks']['v4']:
-      if interface['type'] == 'public':
-        self.ip_address = interface['ip_address']
+        ['device', 'get', '-i', self.device_id])
+    for interface in response['ip_addresses']:
+      if interface['address_family'] != 4:
+        continue
+      if interface['public'] == True:
+        self.ip_address = interface['address']
       else:
-        self.internal_ip = interface['ip_address']
+        self.internal_ip = interface['address']
 
   def _Delete(self):
     """Delete a DigitalOcean VM instance."""
 
     response, retcode = util.MetalAndParse(
-        ['metal', 'device', 'delete', self.project_id, '--force'])
+        ['device', 'delete', '-i', self.device_id, '--force'])
     # The command doesn't return the HTTP status code, and the error
     # format is very difficult to parse, so we string
-    # search. TODO(user): parse the error message.
+    # search. TODO 404 is a standard error and is not in metal json output
     if retcode and '404' in response['errors'][0]['detail']:
       return
     elif retcode:
@@ -116,7 +120,7 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
     """Returns true if the VM exists."""
 
     response, retcode = util.MetalAndParse(
-        ['device', 'get', self.project_id])
+        ['device', 'get', self.device_id])
 
     return retcode == 0
 
@@ -154,3 +158,9 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
         self.remote_disk_counter += 1
         disks.append(data_disk)
       self._CreateScratchDiskFromDisks(disk_spec, disks)
+
+class Ubuntu1804BasedEquinixVirtualMachine(
+    MetalVirtualMachine, linux_vm.Ubuntu1804Mixin):
+  """
+  Equinix Metal
+  """

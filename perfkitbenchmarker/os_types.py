@@ -38,6 +38,7 @@ WINDOWS2012_DESKTOP = 'windows2012_desktop'
 WINDOWS2016_DESKTOP = 'windows2016_desktop'
 WINDOWS2019_DESKTOP = 'windows2019_desktop'
 
+
 # Base-only OS types
 DEBIAN = 'debian'
 RHEL = 'rhel'

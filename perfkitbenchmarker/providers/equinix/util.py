@@ -18,6 +18,7 @@ import logging
 
 from perfkitbenchmarker import vm_util
 
+
 # Default configuration for action status polling.
 DEFAULT_ACTION_WAIT_SECONDS = 10
 DEFAULT_ACTION_MAX_TRIES = 90
@@ -42,7 +43,7 @@ def MetalAndParse(arg_list):
   stdout, _, retcode = vm_util.IssueCommand(
       ['metal'] +
       [str(arg) for arg in arg_list] +
-      ['--output=json'],
+      ['--output', 'json'],
       raise_on_failure=False)
 
   # In case of error, doctl sometimes prints "null" before printing a

@@ -16,7 +16,6 @@ import importlib
 import logging
 import os
 import types
-
 from perfkitbenchmarker import events
 from perfkitbenchmarker import import_util
 from perfkitbenchmarker import requirements
@@ -33,6 +32,7 @@ IBMCLOUD = ibmcloud.CLOUD
 ALICLOUD = 'AliCloud'
 KUBERNETES = 'Kubernetes'
 DIGITALOCEAN = 'DigitalOcean'
+EQUINIX = 'Equinix'
 OPENSTACK = 'OpenStack'
 CLOUDSTACK = 'CloudStack'
 RACKSPACE = 'Rackspace'
@@ -43,7 +43,7 @@ PROFITBRICKS = 'ProfitBricks'
 DOCKER = 'Docker'
 
 VALID_CLOUDS = (GCP, AZURE, AWS, IBMCLOUD, DIGITALOCEAN, KUBERNETES, OPENSTACK,
-                RACKSPACE, CLOUDSTACK, ALICLOUD, MESOS, PROFITBRICKS, DOCKER)
+                RACKSPACE, CLOUDSTACK, ALICLOUD, MESOS, PROFITBRICKS, DOCKER, EQUINIX)
 
 
 _imported_providers = set()
