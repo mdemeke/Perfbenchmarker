@@ -23,18 +23,6 @@ from perfkitbenchmarker.providers.digitalocean import digitalocean_disk
 from perfkitbenchmarker.providers.equinix import util
 from six.moves import range
 from perfkitbenchmarker import linux_virtual_machine as linux_vm
-
-# DigitalOcean sets up the root account with a temporary
-# password that's set as expired, requiring it to be changed
-# immediately. This breaks dpkg postinst scripts, for example
-# running adduser will produce errors:
-#
-#   # chfn -f 'RabbitMQ messaging server' rabbitmq
-#   You are required to change your password immediately (root enforced)
-#   chfn: PAM: Authentication token is no longer valid; new one required
-#
-# To avoid this, just disable the root password (we don't need it),
-# and remove the forced expiration.
 CLOUD_CONFIG_TEMPLATE = '''#cloud-config
 users:
   - name: {0}
@@ -123,41 +111,7 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
         ['device', 'get', self.device_id])
 
     return retcode == 0
-
-  def CreateScratchDisk(self, disk_spec):
-    """Create a VM's scratch disk.
-
-    Args:
-      disk_spec: virtual_machine.BaseDiskSpec object of the disk.
-    """
-
-    if disk_spec.disk_type == disk.LOCAL:
-      if self.scratch_disks and self.scratch_disks[0].disk_type == disk.LOCAL:
-        raise errors.Error('DigitalOcean does not support multiple local '
-                           'disks.')
-
-      if disk_spec.num_striped_disks != 1:
-        raise ValueError('num_striped_disks=%s, but DigitalOcean VMs can only '
-                         'have one local disk.' % disk_spec.num_striped_disks)
-      # The single unique local disk on DigitalOcean is also the boot
-      # disk, so we can't follow the normal procedure of formatting
-      # and mounting. Instead, create a folder at the "mount point" so
-      # the rest of PKB will work as expected and deliberately skip
-      # self._CreateScratchDiskFromDisks.
-      self.RemoteCommand('sudo mkdir -p {0} && sudo chown -R $USER:$USER {0}'
-                         .format(disk_spec.mount_point))
-      self.scratch_disks.append(
-          digitalocean_disk.DigitalOceanLocalDisk(disk_spec))
-    else:
-      disks = []
-      for _ in range(disk_spec.num_striped_disks):
-        # Disk 0 is the local disk.
-        data_disk = digitalocean_disk.DigitalOceanBlockStorageDisk(
-            disk_spec, self.zone)
-        data_disk.disk_number = self.remote_disk_counter + 1
-        self.remote_disk_counter += 1
-        disks.append(data_disk)
-      self._CreateScratchDiskFromDisks(disk_spec, disks)
+#Disk creation needs to be Finished, therefore FIO testing errors will occur unless changed
 
 class Ubuntu1804BasedEquinixVirtualMachine(
     MetalVirtualMachine, linux_vm.Ubuntu1804Mixin):
