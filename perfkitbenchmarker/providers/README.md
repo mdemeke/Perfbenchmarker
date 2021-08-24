@@ -9,7 +9,7 @@ provider(s) you want to benchmark:
 *   [DigitalOcean](https://www.digitalocean.com)
 *   [Rackspace Cloud](https://www.rackspace.com)
 *   [ProfitBricks](https://www.profitbricks.com/)
-
+*   [Equinix Metal](https://metal.equinix.com)
 ## Cloud account setup
 
 This section describes the setup steps needed for each cloud system. Note that
