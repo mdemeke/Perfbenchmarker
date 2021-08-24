@@ -464,5 +464,5 @@ Open the `.boto` file and edit the following fields:
     as part of the `gcloud auth login` step.
     
 ## Equinix Metal Config
-Install `metal`, the DigitalOcean CLI, following the instructions at
+Install `metal`, the Equinix CLI, following the instructions at
     `https://github.com/equinix/metal-cli`.
