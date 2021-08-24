@@ -462,3 +462,7 @@ Open the `.boto` file and edit the following fields:
     `client_id`, `client_secret`: set these to be the same as those in your
     gcloud credentials file (`~/.config/gcloud/credentials.db`), which was setup
     as part of the `gcloud auth login` step.
+    
+## Equinix Metal Config
+Install `metal`, the DigitalOcean CLI, following the instructions at
+    `https://github.com/equinix/metal-cli`.
