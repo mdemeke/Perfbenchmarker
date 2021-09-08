@@ -1,5 +1,5 @@
 # All anchors defined in this file should be compatible
-# with *all* clouds. That means any vm_specs or disk_specs
+# with *all* clouds. That means, any vm_specs or disk_specs
 # defined here should have keys for every cloud.
 default_single_core: &default_single_core
   GCP:
