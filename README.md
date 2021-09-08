@@ -353,6 +353,7 @@ CloudStack | QC-1 | |
 Rackspace | IAD | OnMetal machine-types are available only in IAD zone
 Kubernetes | k8s | |
 ProfitBricks | AUTO | Additional zones: ZONE_1, ZONE_2, or ZONE_3
+EquinixMetal | da | A metro is a regional location where in this case it is Dallas.
 
 Example:
 
