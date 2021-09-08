@@ -1,4 +1,4 @@
-# Copyright 2015 PerfKitBenchmarker Authors. All rights reserved.
+# Copyright 2021 PerfKitBenchmarker Authors. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,15 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Class to represent a DigitalOcean Virtual Machine object (Droplet).
+"""Class to represent a Equinix Virtual Machine object (BareMetal).
 """
-
-from perfkitbenchmarker import disk
 from perfkitbenchmarker import errors
 from perfkitbenchmarker import providers
 from perfkitbenchmarker import virtual_machine
 from perfkitbenchmarker import vm_util
-from perfkitbenchmarker.providers.digitalocean import digitalocean_disk
 from perfkitbenchmarker.providers.equinix import util
 from six.moves import range
 from perfkitbenchmarker import linux_virtual_machine as linux_vm
@@ -91,7 +88,7 @@ class MetalVirtualMachine(virtual_machine.BaseVirtualMachine):
         self.internal_ip = interface['address']
 
   def _Delete(self):
-    """Delete a DigitalOcean VM instance."""
+    """Delete a BareMetal VM Device."""
 
     response, retcode = util.MetalAndParse(
         ['device', 'delete', '-i', self.device_id, '--force'])
