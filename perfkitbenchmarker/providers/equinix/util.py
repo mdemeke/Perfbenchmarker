@@ -1,4 +1,4 @@
-# Copyright 2015 PerfKitBenchmarker Authors. All rights reserved.
+# Copyright 2021 PerfKitBenchmarker Authors. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Utilities for working with DigitalOcean resources."""
+"""Utilities for working with BareMetal resources."""
 
 import json
 import logging
@@ -25,16 +25,16 @@ DEFAULT_ACTION_MAX_TRIES = 90
 
 
 def MetalAndParse(arg_list):
-  """Run a doctl command and parse the output.
+  """Run a Metal device command and parse the output.
 
   Args:
-    arg_list: a list of arguments for doctl. Will be formated with
+    arg_list: a list of arguments for Metal device. Will be formated with
       str() before being sent to the process.
 
   Returns:
     A tuple of
-      - doctl's JSON output, pre-parsed, or None if output is empty.
-      - doctl's return code
+      - Device's JSON output, pre-parsed, or None if output is empty.
+      - Device's return code
 
   Raises:
     errors.VmUtil.CalledProcessError if doctl fails.
@@ -46,7 +46,7 @@ def MetalAndParse(arg_list):
       ['--output', 'json'],
       raise_on_failure=False)
 
-  # In case of error, doctl sometimes prints "null" before printing a
+  # In case of error, device's sometimes prints "null" before printing a
   # JSON error string to stdout. TODO(user): improve parsing of
   # error messages.
   if retcode and stdout.startswith('null'):
@@ -61,12 +61,12 @@ def MetalAndParse(arg_list):
 
 
 class ActionInProgressException(Exception):
-  """Exception to indicate that a DigitalOcean action is in-progress."""
+  """Exception to indicate that a BareMetal action is in-progress."""
   pass
 
 
 class ActionFailedError(Exception):
-  """Exception raised when a DigitalOcean action fails."""
+  """Exception raised when a BareMetal action fails."""
   pass
 
 
